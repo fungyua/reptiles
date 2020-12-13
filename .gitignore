@@ -5,9 +5,6 @@
 *.iws
 .vs/
 
-# Android Studio Navigation editor temp files
-.navigation/
-
 ##----------Other----------
 # osx
 *~
