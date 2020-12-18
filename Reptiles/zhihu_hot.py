@@ -1,9 +1,12 @@
-import requests
-import pymongo
-import re
 import json
-import configparser
-import os
+import re
+
+import pymongo
+import requests
+
+from config.config import mongo
+
+
 # from openpyxl import writer, workbook
 
 
@@ -27,30 +30,24 @@ def main():
     return topics
 
 
-def config(filePath):
-    cnfObj = configparser.ConfigParser()
-    path = os.path.split(os.path.realpath(__file__))[0] + filePath
-    cnfObj.read(path)
-    return cnfObj
-
-
 if __name__ == '__main__':
     url = 'https://www.zhihu.com/billboard'
-    dbName = 'reptiles'
     collectionName = 'zhihu'
-    config = config('/db/config.conf')
 
     client = pymongo.MongoClient(
-        "mongodb://%s:%s" % (config.get('mongo', 'dbHost'), config.get('mongo', 'dbPort')))
-    db = client[config.get('mongo', 'dbName')]
+        "mongodb://%s:%s@%s:%s" % (
+            mongo.get('user'), mongo.get('password'), mongo.get('host'),
+            mongo.get('port')))
+    db = client[mongo.get('database')]
     collection = db[collectionName]
 
     headers = {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47'
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47 '
     }
-    if collectionName in client[dbName].list_collection_names():
+    if collectionName in db.list_collection_names():
         print('集合已经存在')
-        client[dbName][collectionName].drop()
+        collection.drop()
         print('集合已经删除')
-    client[dbName][collectionName].insert_many(main())
+    collection.insert_many(main())
     print('爬取完毕')

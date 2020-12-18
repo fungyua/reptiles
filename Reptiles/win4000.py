@@ -1,17 +1,19 @@
+import re
+import os
+import time
+import random
 import pymongo
 import requests
-from lxml import etree
-import time
-import os
 import configparser
-import random
-import re
+from lxml import etree
 
 headers = {
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47'
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47 '
 }
 
 myDir = os.path.split(os.path.realpath(__file__))[0]
+
 
 def get_taotu_url(collection):
     taotu_infos = []
@@ -110,7 +112,7 @@ def main():
     collectionName = 'win4000'
 
     config = configparser.ConfigParser()
-    path = myDir + '/../db/config.conf'
+    path = myDir + '/../config/config.conf'
     config.read(path)
 
     client = pymongo.MongoClient(
