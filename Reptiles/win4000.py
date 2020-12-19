@@ -108,8 +108,7 @@ def get_taotu_url(collection):
 
 
 def main():
-    dbName = 'reptiles'
-    collectionName = 'win4000'
+    collection_name = 'win4000'
 
     config = configparser.ConfigParser()
     path = myDir + '/../config/config.conf'
@@ -118,11 +117,11 @@ def main():
     client = pymongo.MongoClient(
         "mongodb://%s:%s" % (config.get('mongo', 'dbHost'), config.get('mongo', 'dbPort')))
     db = client[config.get('mongo', 'dbName')]
-    collection = db[collectionName]
+    collection = db[collection_name]
 
-    if collectionName in client[dbName].list_collection_names():
+    if collection_name in db.list_collection_names():
         print('集合已经存在')
-        client[dbName][collectionName].drop()
+        collection.drop()
         print('集合已经删除')
 
     get_taotu_url(collection)
