@@ -2,15 +2,10 @@ import re
 import os
 import time
 import random
-import pymongo
 import requests
-import configparser
 from lxml import etree
-
-headers = {
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                  'Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47 '
-}
+from pymongo import MongoClient
+from config.config import mongo, headers
 
 myDir = os.path.split(os.path.realpath(__file__))[0]
 
@@ -56,7 +51,8 @@ def get_taotu_url(collection):
                         f.write(requests.get(image_first).content)
                         print(f'成功下载图片：{myDir}/images/{title}/{image_name}/1.jpg')
                     for m in range(2, int(max_page)):
-                        image_src = etree.HTML(requests.get(f'http://www.win4000.com/meinv{image_id}_{m}.html').text).xpath(
+                        image_src = \
+                        etree.HTML(requests.get(f'http://www.win4000.com/meinv{image_id}_{m}.html').text).xpath(
                             '//*[@class="pic-large"]')[0].get('src')
                         images.append(image_src)
                         print(image_src)
@@ -88,7 +84,8 @@ def get_taotu_url(collection):
                             f.write(requests.get(image_first).content)
                             print(f'成功下载图片：{myDir}/images/{title}/{image_name}/1.jpg')
                         for m in range(2, int(max_page)):
-                            image_src = etree.HTML(requests.get(f'http://www.win4000.com/meinv{image_id}_{m}.html').text).xpath(
+                            image_src = \
+                            etree.HTML(requests.get(f'http://www.win4000.com/meinv{image_id}_{m}.html').text).xpath(
                                 '//*[@class="pic-large"]')[0].get('src')
                             images.append(image_src)
                             print(image_src)
@@ -110,13 +107,9 @@ def get_taotu_url(collection):
 def main():
     collection_name = 'win4000'
 
-    config = configparser.ConfigParser()
-    path = myDir + '/../config/config.conf'
-    config.read(path)
-
-    client = pymongo.MongoClient(
-        "mongodb://%s:%s" % (config.get('mongo', 'dbHost'), config.get('mongo', 'dbPort')))
-    db = client[config.get('mongo', 'dbName')]
+    client = MongoClient(
+        "mongodb://%s:%s" % (mongo.get('dbHost'), mongo.get('dbPort')))
+    db = client[mongo.get('dbName')]
     collection = db[collection_name]
 
     if collection_name in db.list_collection_names():
