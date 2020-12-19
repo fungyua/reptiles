@@ -1,17 +1,19 @@
+import re
+import os
+import time
+import random
 import pymongo
 import requests
-from lxml import etree
-import time
-import os
 import configparser
-import random
-import re
+from lxml import etree
 
 headers = {
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47'
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47 '
 }
 
 myDir = os.path.split(os.path.realpath(__file__))[0]
+
 
 def get_taotu_url(collection):
     taotu_infos = []
@@ -106,21 +108,20 @@ def get_taotu_url(collection):
 
 
 def main():
-    dbName = 'reptiles'
-    collectionName = 'win4000'
+    collection_name = 'win4000'
 
     config = configparser.ConfigParser()
-    path = myDir + '/../db/config.conf'
+    path = myDir + '/../config/config.conf'
     config.read(path)
 
     client = pymongo.MongoClient(
         "mongodb://%s:%s" % (config.get('mongo', 'dbHost'), config.get('mongo', 'dbPort')))
     db = client[config.get('mongo', 'dbName')]
-    collection = db[collectionName]
+    collection = db[collection_name]
 
-    if collectionName in client[dbName].list_collection_names():
+    if collection_name in db.list_collection_names():
         print('集合已经存在')
-        client[dbName][collectionName].drop()
+        collection.drop()
         print('集合已经删除')
 
     get_taotu_url(collection)

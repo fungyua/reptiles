@@ -1,10 +1,13 @@
-import requests
-import pymongo
-import re
 import json
-import configparser
-import os
-from openpyxl import writer, workbook
+import re
+
+import pymongo
+import requests
+
+from config.config import mongo
+
+
+# from openpyxl import writer, workbook
 
 
 def main():
@@ -30,17 +33,12 @@ def main():
 if __name__ == '__main__':
     url = 'https://www.zhihu.com/billboard'
     collectionName = 'zhihu'
-    drive = 'mongo'
-
-    config = configparser.ConfigParser()
-    path = os.path.split(os.path.realpath(__file__))[0] + '/db/config.conf'
-    config.read(path)
 
     client = pymongo.MongoClient(
         "mongodb://%s:%s@%s:%s" % (
-            config.get(drive, 'user'), config.get(drive, 'password'), config.get(drive, 'host'),
-            config.get(drive, 'port')))
-    db = client[config.get(drive, 'database')]
+            mongo.get('user'), mongo.get('password'), mongo.get('host'),
+            mongo.get('port')))
+    db = client[mongo.get('database')]
     collection = db[collectionName]
 
     headers = {
