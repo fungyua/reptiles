@@ -1,5 +1,5 @@
-import openpyxl
-from config.config import mongo, headers
+from openpyxl import Workbook
+from config import mongo, headers
 from requests import get
 import json
 

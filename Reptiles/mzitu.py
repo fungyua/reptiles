@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 
-from config.config import mongo, headers
+from config import mongo, headers
 
 
 class mzitu:

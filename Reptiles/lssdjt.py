@@ -1,8 +1,7 @@
-import os
 import pymongo
 import requests
 from lxml import etree
-from config.config import mongo, headers
+from config import mongo, headers
 
 
 def main():

@@ -7,7 +7,7 @@ from multiprocessing import cpu_count
 
 import requests
 
-from config.config import headers
+from config import headers
 
 
 class hbilibili:
@@ -32,7 +32,7 @@ class hbilibili:
         image_name = data['item']['title'].replace("|", "_").replace('.', '_')
         image_path = f'{self.root}/{self.photo_type}/{self.item}/{user_name}'
         os.makedirs(f'{image_path}/{image_name}', exist_ok=True)
-        self.save_image(f'{image_path}/_{image_name}.jpg', data['user']['head_url'])
+        self.save_image(f'{image_path}/_avatar.jpg', data['user']['head_url'])
         for o, m in enumerate(data['item']['pictures']):
             self.save_image(f'{image_path}/{image_name}/{o + 1}.jpg', m['img_src'])
 

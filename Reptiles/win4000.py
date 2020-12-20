@@ -5,7 +5,7 @@ import random
 import requests
 from lxml import etree
 from pymongo import MongoClient
-from config.config import mongo, headers
+from config import mongo, headers
 
 myDir = os.path.split(os.path.realpath(__file__))[0]
 

@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 
-from config.config import mongo, params
+from config import mongo, params
 
 
 class ExHentai:

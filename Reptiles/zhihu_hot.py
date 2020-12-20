@@ -4,7 +4,7 @@ import re
 import pymongo
 import requests
 
-from config.config import mongo, headers
+from config import mongo, headers
 
 
 class zhihu_hot:
