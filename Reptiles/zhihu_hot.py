@@ -4,7 +4,7 @@ import re
 import pymongo
 import requests
 
-from config.config import mongo
+from config.config import mongo, headers
 
 
 # from openpyxl import writer, workbook
@@ -41,10 +41,6 @@ if __name__ == '__main__':
     db = client[mongo.get('database')]
     collection = db[collectionName]
 
-    headers = {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                      'Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47 '
-    }
     if collectionName in db.list_collection_names():
         print('集合已经存在')
         collection.drop()
