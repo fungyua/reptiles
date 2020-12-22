@@ -1,7 +1,7 @@
 import json
 import re
 
-import pymongo
+from pymongo import MongoClient;
 import requests
 
 from config import mongo, headers
@@ -11,15 +11,20 @@ class zhihu_hot:
     def __init__(self):
         self.url = 'https://www.zhihu.com/billboard'
         collection_name = 'zhihu'
-        self.db = pymongo.MongoClient(
+        self.client = MongoClient(
             "mongodb://%s:%s@%s:%s" % (
                 mongo.get('user'), mongo.get('password'), mongo.get('host'),
-                mongo.get('port')))[mongo.get('database')]
+                mongo.get('port')))
+        self.db = self.client[mongo.get('database')]
         self.collection = self.db[collection_name]
         if collection_name in self.db.list_collection_names():
             print('集合已经存在')
             self.collection.drop()
             print('集合已经删除')
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print('关闭数据库连接')
+        self.client.close()
 
     def run(self):
         result = json.loads(

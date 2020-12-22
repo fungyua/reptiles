@@ -38,6 +38,10 @@ class Lago:
         self.word = word
         self.browser = webdriver.Chrome()
 
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print('关闭数据库连接')
+        self.client.close()
+
     def run(self):
         pass
         # https: // www.lagou.com / jobs / list_java?labelWords = & fromSearch = true & suginput =
