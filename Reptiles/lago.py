@@ -28,12 +28,19 @@ from selenium import webdriver
 
 class Lago:
     def __init__(self, word):
+        # 准备全局变量
+        self.data = list()
+        self.isEnd = False
+        # 启动浏览器，初始化浏览器
+        opt = webdriver.chrome.options.Options()
         # https://www.lagou.com/jobs/positionAjax.json?needAddtionalResult=false
         self.url = 'https://www.lagou.com/'
         self.word = word
+        self.browser = webdriver.Chrome()
 
     def run(self):
         pass
+        # https: // www.lagou.com / jobs / list_java?labelWords = & fromSearch = true & suginput =
         # data = get(f'{self.url}jobs/positionAjax.json', headers=headers, params={
         #     'needAddtionalResult': 'false',
         #     'first': 'true',
