@@ -14,13 +14,23 @@ class ExHentai:
     def __init__(self, options=params, page=0):
         self.headers = options['headers']
         self.cookies = options['cookie']
+        collection_name = 'exhentai'
         self.data = requests.get(options['url'], params={'page': page}, headers=self.headers, cookies=self.cookies)
-        self.db = MongoClient(
+        self.client = MongoClient(
             "mongodb://%s:%s@%s:%s" % (
-                mongo.get('user'), mongo.get('passwd'), mongo.get('host'),
-                mongo.get('port'))).get(mongo.get('db'))
-        self.collection = self.db.get(mongo.get('table'))
+                mongo.get('user'), mongo.get('password'), mongo.get('host'),
+                mongo.get('port')))
+        self.db = self.client[mongo.get('database')]
+        self.collection = self.db[collection_name]
+        if collection_name in self.db.list_collection_names():
+            print('数据表已存在')
+            self.collection.drop()
+            print('数据表已删除')
         self.get_data()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print('已断开数据库连接')
+        self.client.close()
 
     def get_data(self):
         with ThreadPoolExecutor(max_workers=cpu_count()) as thread:
