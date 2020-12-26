@@ -7,7 +7,7 @@ from lxml import etree
 from pymongo import MongoClient
 from config import mongo, headers
 
-myDir = os.path.split(os.path.realpath(__file__))[0]
+myDir = os.getcwd()
 
 
 def get_taotu_url(collection):

@@ -58,5 +58,5 @@ class mzitu:
 
 
 if __name__ == '__main__':
-    current_path = os.path.split(os.path.realpath(__file__))[0] + '/images'
+    current_path = os.getcwd() + '/images'
     mzitu(current_path).run()

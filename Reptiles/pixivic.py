@@ -39,7 +39,7 @@ class pixivic:
 
 
 if __name__ == '__main__':
-    current_path = os.path.split(os.path.realpath(__file__))[0] + '/images'
+    current_path = os.getcwd() + '/images'
     all_data = json.loads(requests.get('https://pix.ipv4.host/ranks',
                                        {'page': 1, 'date': '2020-12-12', 'mode': 'day', 'pageSize': 200}).text)['data']
     # print(p.data)
