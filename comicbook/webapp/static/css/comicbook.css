@@ -1,0 +1,116 @@
+body {
+    display: table;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    background-image: url('../images/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: bottom right;
+}
+
+#comiclink:focus {
+    border-color: #CC7D60!important;
+    border-right-color: unset;
+}
+
+.content-wrapper {
+    margin: 100px auto auto 100px;
+    width: 340px;
+}
+
+.title {
+    color: #b4451c;
+}
+.title h1 {
+    font-size: 46px;
+}
+.description {
+    font-size: 20px;
+    width: 415px;
+    color: gray;
+}
+
+#comic-form {
+    margin-top: 2em;
+}
+
+.input-box {
+    width: 340px;
+    margin: 20px 0 4px 0;
+}
+.hint {
+    position: relative;
+    left: 4px;
+    color: gray;
+    font-size: 13px;
+    width: 340px;
+}
+.ui.accordion .title:not(.ui) {
+    color: gray;
+}
+.ui.message p:first-child {
+    margin-bottom: 0;
+}
+.ui.message>.close.icon {
+    top: 1.38575em;
+    right: 1em;
+}
+
+#dl-button {
+    width: 54px;
+    background-color: #b4451c;
+}
+
+.footer.bg-source {
+    position: fixed;
+    bottom: 4px;
+    right: 4px;
+}
+.footer.copyright {
+    position: fixed;
+    bottom: 4px;
+    left: 4px;
+}
+.footer {
+    color: gray;
+}
+footer a {
+    text-decoration: none;
+    color: gray;
+}
+.min-footer {
+    display: none;
+}
+
+@media screen and (max-width: 518px) {
+.content-wrapper {
+    margin: 120px auto 0 auto;
+    width: 90%;
+    text-align: center;
+}
+.title h1 {
+    font-size: 42px;
+}
+.description {
+    font-size: 17px;
+    width: initial;
+}
+
+.hint {
+    left: 0;
+}
+
+.footer {
+    display: none;
+}
+.min-footer {
+    font-size: 10px;
+    display: block;
+    position: relative;
+    text-align: center;
+    margin: 8px auto;
+}
+}

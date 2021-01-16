@@ -1,20 +1,18 @@
 import pymongo
 import requests
-from lxml import etree
+from bs4 import BeautifulSoup
 from config import mongo, headers
 
 
 def main():
-    html = etree.HTML(requests.get(url, headers).content.decode('utf-8'))
-    ls = html.xpath('/html/body/div[4]/div[1]/div/div[2]/ul[1]/li/a')
     topics = []
     i = 1
-    for target in ls:
+    for target in BeautifulSoup(requests.get(url, headers).content.decode('utf-8'), 'lxml').select('.list a'):
         topic = {
             '_id': i,
-            'title': target.xpath('.//i')[0].text,
-            'url': target.get('href'),
-            'time': target.xpath('.//em')[0].text,
+            'title': target['title'],
+            'url': url + target['href'],
+            'time': target.find('em').text,
             'image': target.get('rel')
         }
         topics.append(topic)
@@ -23,7 +21,7 @@ def main():
 
 
 if __name__ == '__main__':
-    url = 'https://www.lssdjt.com/'
+    url = 'https://www.lssdjt.com'
     collectionName = 'today'
     drive = 'mongo'
 

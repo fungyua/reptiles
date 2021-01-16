@@ -1,7 +1,7 @@
 import json
 import re
 
-from pymongo import MongoClient;
+from pymongo import MongoClient
 import requests
 
 from config import mongo, headers

@@ -4,6 +4,7 @@ import random
 import time
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from multiprocessing import cpu_count
+from pyaria2 import Aria2RPC
 
 import requests
 

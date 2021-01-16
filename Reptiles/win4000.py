@@ -11,7 +11,6 @@ myDir = os.getcwd()
 
 
 def get_taotu_url(collection):
-    taotu_infos = []
     if not os.path.exists(f'{myDir}/images'):
         os.mkdir(f'{myDir}/images')
     for i in range(1, 6):
@@ -96,12 +95,10 @@ def get_taotu_url(collection):
                             'title': image.xpath('/html/body/div[4]/div/div[2]/div/div[1]/div[1]/h1')[0].text,
                             'images': images
                         })
-                        taotu_infos.append(taotu_info)
                         time.sleep(random.randint(1, 3))
                 break
             collection.insert_one(taotu_info)
             print('%s 已插入数据库' % title)
-    # return taotu_infos
 
 
 def main():
