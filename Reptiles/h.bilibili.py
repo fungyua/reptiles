@@ -2,44 +2,55 @@ import json
 import os
 import random
 import time
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-from multiprocessing import cpu_count
-from pyaria2 import Aria2RPC
 
-import requests
+from aria2_rpc import Aria2RPC
+from requests import get
 
-from config import headers
+from config import headers, aria2
+
+import pretty_errors
 
 
-class hbilibili:
-    def __init__(self, root, photo_type, item, args, pages, min_time=0, max_time=1):
+class HBiliBili:
+    def __init__(self, root, photo_type, item, args, page, min_time=0, max_time=1):
         self.root = root
         self.min_time = min_time
         self.max_time = max_time
         self.photo_type = photo_type
         self.item = item
         self.args = args
-        with ProcessPoolExecutor(max_workers=cpu_count()) as process:
-            process.map(self.run, list(range(pages)))
+        self.aria2 = Aria2RPC(host=aria2.get('host'), port=aria2.get('port'), token=aria2.get('token'))
+        self.run(page)
 
     def run(self, page):
-        with ThreadPoolExecutor(max_workers=cpu_count()) as thread:
-            thread.map(self.get_images, json.loads(requests.get(
+        for i in json.loads(get(
                 f'https://api.vc.bilibili.com/link_draw/v2/{self.photo_type}/list?category={self.item}&{self.args}&page_num={page}',
-                headers=headers).text)['data']['items'])
+                headers=headers).text)['data']['items']:
+            self.get_images(i)
 
     def get_images(self, data):
         user_name = data['user']['name'].replace("|", "_").replace('.', '_')
         image_name = data['item']['title'].replace("|", "_").replace('.', '_')
         image_path = f'{self.root}/{self.photo_type}/{self.item}/{user_name}'
-        os.makedirs(f'{image_path}/{image_name}', exist_ok=True)
-        self.save_image(f'{image_path}/_avatar.jpg', data['user']['head_url'])
+        dl_path = f'{image_path}/{image_name}'
+        os.makedirs(dl_path, exist_ok=True)
+        print(image_path + '/_avatar.jpg', end='  ')
+        print(os.path.isfile(image_path + '/_avatar.jpg'))
+        if not os.path.isfile(image_path + '/_avatar.jpg'):
+            self.aria2.addUri([data['user']['head_url']], {
+                'dir': image_path,
+                'out': '_avatar.jpg'
+            })
         for o, m in enumerate(data['item']['pictures']):
-            self.save_image(f'{image_path}/{image_name}/{o + 1}.jpg', m['img_src'])
+            self.aria2.addUri([m['img_src']], {
+                'dir': dl_path,
+                'out': f'{o + 1}.jpg'
+            })
+        time.sleep(random.randint(self.min_time, self.max_time))
 
     def save_image(self, image_path, url):
         with open(image_path, 'wb') as f:
-            f.write(requests.get(url).content)
+            f.write(get(url).content)
             print(image_path)
             print(f'成功下载 %s' % url)
             time.sleep(random.randint(self.min_time, self.max_time))
@@ -47,5 +58,5 @@ class hbilibili:
 
 if __name__ == '__main__':
     category = {'Photo': ['sifu', 'cos'], 'Doc': ['illustration', 'all', 'comic', 'draw']}
-    myDir = os.path.split(os.path.realpath(__file__))[0] + '/images'
-    hbilibili(myDir, 'Photo', 'cos', 'type=hot&page_size=20', 5)
+    myDir = os.getcwd() + '/images'
+    HBiliBili(myDir, 'Photo', 'cos', 'type=hot&page_size=20', 0, 2, 4)
